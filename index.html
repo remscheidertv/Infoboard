@@ -5,42 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vereins-Infoboard</title>
     <style>
-        body {
-            background-color: #000;
-            color: #fff;
-            font-family: sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+        body, html {
             margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #000;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
         }
     </style>
 </head>
 <body>
-    <p>Infoboard wird geladen...</p>
+
+    <!-- Die Präsentation wird sauber im Rahmen eingebettet -->
+    <iframe id="boardFrame" src="" allowfullscreen="true"></iframe>
 
     <script>
         // =========================================================
-        // EINSTELLUNGEN - HIER BEARBEITEN
+        // EINSTELLUNGEN
         // =========================================================
-        
-        // 1. Die URL deiner Google Präsentation (oder jeder anderen Ziel-Seite)
         const PRESENTATION_URL = "https://docs.google.com/presentation/d/e/2PACX-1vS6FISkOWah7vDfoTksdmtnKHjcwhseKtcHiUtf38DiKiDWwDJmEZSFkewOLSAytIgkqu7JZndHkYa6/pub?start=true&loop=true&delayms=30000";
-        
-        // 2. Aktualisierungsintervall in Minuten
-        const REFRESH_MINUTES = 5;
+        const REFRESH_MINUTES = 5; // Intervall in Minuten
 
-        // =========================================================
-        // AUTOMATISCHE AUSFÜHRUNG (NICHTS ÄNDERN NOTWENDIG)
-        // =========================================================
-        
-        // Sofortige Weiterleitung beim ersten Aufruf
-        window.location.href = PRESENTATION_URL;
+        // URL beim Start in den Iframe laden
+        document.getElementById('boardFrame').src = PRESENTATION_URL;
 
-        // Automatische Aktualisierung nach Ablauf der eingestellten Minuten
+        // Automatischer Reload der Seite nach X Minuten
         setTimeout(function() {
-            window.location.href = PRESENTATION_URL;
+            location.reload();
         }, REFRESH_MINUTES * 60 * 1000);
     </script>
 </body>
