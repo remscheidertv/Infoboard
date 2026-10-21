@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RTV Ticker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            width: 100vw;
+            height: 100vh;
+            background-color: #111111;
+            color: #ffcc00; /* RTV-Gold/Gelb */
+            font-family: Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+        }
+        .ticker-text {
+            white-space: nowrap;
+            animation: ticker 25s linear infinite;
+            font-size: 5vh;
+            font-weight: bold;
+        }
+        @keyframes ticker {
+            0% { transform: translateX(100vw); }
+            100% { transform: translateX(-100%); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ticker-text" id="ticker">
+        Herzlich willkommen beim Remscheider Turnverein! &nbsp;&nbsp;|&nbsp;&nbsp; Bitte beachten Sie die aktuellen Hallenzeiten.
+    </div>
+
+    <script>
+        // Liest den Parameter ?text=... aus der URL aus, falls vorhanden
+        const urlParams = new URLSearchParams(window.location.search);
+        const customText = urlParams.get('text');
+
+        if (customText) {
+            document.getElementById('ticker').innerHTML = decodeURIComponent(customText);
+        }
+    </script>
+</body>
+</html>
