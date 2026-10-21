@@ -16,7 +16,6 @@
             overflow: hidden;
             background-color: #000000;
         }
-        /* Container füllt den Bildschirm und schneidet überstehende Ränder ab */
         #iframeWrapper {
             width: 100vw;
             height: 100vh;
@@ -24,7 +23,6 @@
             position: relative;
             background-color: #000000;
         }
-        /* Fixiert das Iframe oben und zoomt es minimal ein, um den unteren Balken auszublenden */
         #slidesFrame {
             width: 100vw;
             height: 100vh;
@@ -33,8 +31,6 @@
             position: absolute;
             top: 0;
             left: 0;
-            transform: scale(1.08);
-            transform-origin: top center;
         }
         /* Fallback-Bild Container bei Verbindungsausfall */
         #fallbackContainer {
@@ -68,8 +64,8 @@
     </div>
 
     <script>
-        // Konfiguration
-        const SLIDES_URL = "https://docs.google.com/presentation/d/e/2PACX-1vS6FISkOWah7vDfoTksdmtnKHjcwhseKtcHiUtf38DiKiDWwDJmEZSFkewOLSAytIgkqu7JZndHkYa6/pub?start=true&loop=true&delayms=30000";
+        // Konfiguration (wieder mit pubembed, damit es im Iframe lädt)
+        const SLIDES_URL = "https://docs.google.com/presentation/d/e/2PACX-1vS6FISkOWah7vDfoTksdmtnKHjcwhseKtcHiUtf38DiKiDWwDJmEZSFkewOLSAytIgkqu7JZndHkYa6/pubembed?start=true&loop=true&delayms=30000";
         const FALLBACK_IMAGE_URL = "RTV-ZOOM-Bakcground.jpg"; 
         const RELOAD_INTERVAL_MINUTES = 60;
 
@@ -96,7 +92,7 @@
             }
         }, 10000);
 
-        // Automatischer Reload der Seite nach der angegebenen Stundenzahl (verhindert Speicherlecks)
+        // Automatischer Reload der Seite nach der angegebenen Stundenzahl
         setTimeout(function() {
             location.reload();
         }, RELOAD_INTERVAL_MINUTES * 60 * 1000);
