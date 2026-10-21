@@ -27,7 +27,7 @@
             overflow: hidden;
         }
 
-        /* Skaliert das iFrame leicht höher, um die Statusleiste nach unten herauszuschieben */
+        /* Skaliert das iFrame leicht höher, um die Statusleiste herauszuschieben */
         iframe {
             position: absolute;
             top: 0;
@@ -55,11 +55,11 @@
     <!-- Default-/Fallback-Bild -->
     <img id="default-image" src="https://via.placeholder.com/1920x1080/000000/ffffff?text=Remscheider+Turnverein+Infoboard" alt="Default Infoboard" />
 
-    <!-- Canva iFrame mit Autoplay & Loop -->
+    <!-- Canva iFrame mit Fit-Mode, Autoplay & Loop -->
     <div class="iframe-container">
         <iframe 
             id="canva-frame"
-            src="https://www.canva.com/design/DAHYp2BSPNE/I5b7pjczp5wr3wBzGigByw/view?embed&autoplay=1&loop=1" 
+            src="https://www.canva.com/design/DAHYp2BSPNE/I5b7pjczp5wr3wBzGigByw/view?embed&autoplay=1&loop=1&mode=fit" 
             allowfullscreen="allowfullscreen" 
             allow="fullscreen"
             onload="hideDefaultImage()">
