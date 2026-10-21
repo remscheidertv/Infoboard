@@ -16,22 +16,25 @@
             overflow: hidden;
             background-color: #000000;
         }
-        /* Dieser Container schneidet den überstehenden unteren Bereich (die Google-Leiste) ab */
+        /* Wrapper füllt den Bildschirm und versteckt überstehende Ränder */
         #iframeWrapper {
             width: 100vw;
             height: 100vh;
             overflow: hidden;
             position: relative;
+            background-color: #000000;
         }
-        /* Das Iframe wird höher gezogen, sodass die Google-Leiste unten verschwindet */
+        /* Das Iframe wird minimal skaliert (gezoomt), damit es den Bildschirm komplett ausfüllt */
         #slidesFrame {
             width: 100vw;
-            height: calc(100vh + 50px);
+            height: 100vh;
             border: 0;
             display: block;
             position: absolute;
             top: 0;
             left: 0;
+            transform: scale(1.04); /* Skaliert das Bild um 4% größer – bei Bedarf anpassen (z.B. 1.02 bis 1.06) */
+            transform-origin: center center;
         }
         /* Fallback-Bild Container bei Verbindungsausfall */
         #fallbackContainer {
