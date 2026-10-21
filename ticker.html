@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RTV Ticker</title>
+    <title>RTV Ticker Seamless</title>
     <style>
         * {
             margin: 0;
@@ -13,41 +13,55 @@
         body {
             width: 100vw;
             height: 100vh;
-            background-color: #006;
-            color: #fff; /* RTV-Gold/Gelb */
+            background-color: #111111;
+            color: #ffcc00; /* RTV-Gold/Gelb */
             font-family: Arial, sans-serif;
             display: flex;
             align-items: center;
             overflow: hidden;
         }
-        .ticker-text {
+
+        /* Container für den fließenden Übergang */
+        .ticker-wrap {
+            width: 100vw;
+            overflow: hidden;
             white-space: nowrap;
-            animation: ticker 30s linear infinite;
+        }
+
+        .ticker-move {
+            display: inline-block;
+            white-space: nowrap;
+            padding-left: 100%;
+            animation: marquee 35s linear infinite;
             font-size: 5vh;
             font-weight: bold;
         }
-        @keyframes ticker {
-            0% { transform: translateX(100vw); }
-            100% { transform: translateX(-100%); }
+
+        @keyframes marquee {
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-50%, 0, 0); } /* Verschiebt nur um die Hälfte, da der Text verdoppelt wird */
         }
     </style>
 </head>
 <body>
 
-    <div class="ticker-text" id="ticker">
-        Lade aktuelle Vereinsinfos...
+    <div class="ticker-wrap">
+        <div class="ticker-move" id="ticker">
+            Lade aktuelle Vereinsinfos...
+        </div>
     </div>
 
     <script>
-        // TRAGE HIER DEINE GOOGLE SCRIPT WEB-APP URL EIN:
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzK6YcCnY1VhG-Hxq_3_Q_djXFHbfdB-jZ1TnxRRc8CCUJhOhUwlgtARC2pyWO3zFLdEA/exec";
+        const GOOGLE_SCRIPT_URL = "DEINE_GOOGLE_SCRIPT_WEB_APP_URL";
 
         function fetchTickerText() {
             fetch(GOOGLE_SCRIPT_URL)
                 .then(response => response.json())
                 .then(data => {
                     if (data.text) {
-                        document.getElementById('ticker').innerHTML = data.text;
+                        // Der Text wird mit ausreichend Abstand verdoppelt, damit er lückenlos übergeht
+                        const baseText = data.text + " &nbsp;&nbsp;&nbsp;&nbsp;+++&nbsp;&nbsp;&nbsp;&nbsp; ";
+                        document.getElementById('ticker').innerHTML = baseText + baseText;
                     }
                 })
                 .catch(error => {
@@ -55,11 +69,8 @@
                 });
         }
 
-        // Text beim Start laden
         fetchTickerText();
-
-        // Text alle 60 Sekunden automatisch im Hintergrund aktualisieren
-        setInterval(fetchTickerText, 60000);
+        setInterval(fetchTickerText, 60000); // Alle 60 Sekunden aktualisieren
     </script>
 </body>
 </html>
