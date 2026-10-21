@@ -17,7 +17,7 @@
             background-color: #000000;
         }
 
-        /* Container schneidet die untere Canva-Leiste ab */
+        /* Container schneidet alle überstehenden Canva-Leisten ab */
         .iframe-container {
             position: absolute;
             top: 0;
@@ -27,13 +27,13 @@
             overflow: hidden;
         }
 
-        /* Skaliert das iFrame auf 106vh, um den unteren Balken herauszuschieben */
+        /* iFrame vergrößert und verschoben, um obere und untere Leisten wegzuschneiden */
         iframe {
             position: absolute;
-            top: 0;
+            top: -6vh;
             left: 0;
             width: 100vw;
-            height: 106vh;
+            height: 112vh;
             border: none;
             z-index: 2;
         }
