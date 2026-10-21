@@ -16,25 +16,12 @@
             overflow: hidden;
             background-color: #000000;
         }
-        /* Wrapper füllt den Bildschirm und versteckt überstehende Ränder */
-        #iframeWrapper {
-            width: 100vw;
-            height: 100vh;
-            overflow: hidden;
-            position: relative;
-            background-color: #000000;
-        }
-        /* Das Iframe wird minimal skaliert (gezoomt), damit es den Bildschirm komplett ausfüllt */
-        #slidesFrame {
+        /* Vollbild-Darstellung ohne Skalierungs-F Verzerrungen */
+        iframe {
             width: 100vw;
             height: 100vh;
             border: 0;
             display: block;
-            position: absolute;
-            top: 0;
-            left: 0;
-            transform: scale(0.75); /* Skaliert das Bild um 4% größer – bei Bedarf anpassen (z.B. 1.02 bis 1.06) */
-            transform-origin: center center;
         }
         /* Fallback-Bild Container bei Verbindungsausfall */
         #fallbackContainer {
@@ -58,9 +45,7 @@
 </head>
 <body>
 
-    <div id="iframeWrapper">
-        <iframe id="slidesFrame" src="" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
-    </div>
+    <iframe id="slidesFrame" src="" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
 
     <!-- Notfall-Bild bei Ladeproblemen / Internet-Ausfall -->
     <div id="fallbackContainer">
@@ -68,8 +53,8 @@
     </div>
 
     <script>
-        // 1. DEINE GOOGLE SLIDES PUBEMBED-URL
-        const SLIDES_URL = "https://docs.google.com/presentation/d/e/2PACX-1vS6FISkOWah7vDfoTksdmtnKHjcwhseKtcHiUtf38DiKiDWwDJmEZSFkewOLSAytIgkqu7JZndHkYa6/pubembed?start=true&loop=true&delayms=30000";
+        // 1. GOOGLE SLIDES URL MIT ANGEPASSTEM PARAMETER FÜR VOLLBILD
+        const SLIDES_URL = "https://docs.google.com/presentation/d/e/2PACX-1vS6FISkOWah7vDfoTksdmtnKHjcwhseKtcHiUtf38DiKiDWwDJmEZSFkewOLSAytIgkqu7JZndHkYa6/pub?start=true&loop=true&delayms=30000";
 
         // 2. DEIN NOTFALL-BILD
         const FALLBACK_IMAGE_URL = "RTV-ZOOM-Bakcground.jpg"; 
