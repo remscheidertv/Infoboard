@@ -29,7 +29,7 @@
             background-color: #000000;
         }
 
-        /* iFrame füllt die 90% aus (plus leichte Übergrösse zum Verstecken des Balkens) */
+        /* iFrame füllt die 90% aus (leicht vergrößert auf 96vh, um den Canva-Balken unten auszublenden) */
         iframe {
             position: absolute;
             top: 0;
@@ -40,7 +40,7 @@
             z-index: 2;
         }
 
-        /* Lokales Fallback-Bild, falls Canva streikt */
+        /* Fallback-Bild im oberen 90%-Bereich, falls Canva nicht lädt */
         #default-image {
             position: absolute;
             top: 0;
@@ -70,9 +70,9 @@
         .ticker-text {
             white-space: nowrap;
             animation: ticker 25s linear infinite;
-            font-size: calc(3vh + 1vw); /* Skaliert automatisch mit der Bildschirmgrösse */
+            font-size: calc(3vh + 1vw);
             font-weight: bold;
-            color: #ffcc00; /* Auffällige Farbe für den Text, z.B. RTV-Gelb/Gold */
+            color: #ffcc00;
         }
 
         @keyframes ticker {
@@ -83,20 +83,22 @@
 </head>
 <body>
 
-    <!-- Lokales Fallback-Bild auf GitHub (nur im oberen 90%-Bereich) -->
+    <!-- Fallback-Bild (RTV-ZOOM-Bakcground.jpg) -->
     <img id="default-image" src="RTV-ZOOM-Bakcground.jpg" alt="Remscheider Turnverein Default Board" />
 
-    <!-- Canva iFrame im 90%-Bereich -->
+    <!-- Canva iFrame mit deinem Original-Embed-Link -->
     <div class="iframe-container" id="iframe-box" style="display: none;">
         <iframe 
             id="canva-frame"
-            src="https://www.canva.com/design/DAHYp2BSPNE/sZeaoVpePLgLI1juwcKHUQ/view?utm_content=DAHYp2BSPNE&utm_campaign=designshare&utm_medium=link&utm_source=viewer" 
+            src="https://www.canva.com/design/DAHYp2BSPNE/sZeaoVpePLgLI1juwcKHUQ/view?embed" 
             allowfullscreen="allowfullscreen" 
-            allow="fullscreen">
+            allow="fullscreen"
+            loading="lazy"
+            onload="showIframe()">
         </iframe>
     </div>
 
-    <!-- 10% Lauftext unten (Hier kannst du den Text beliebig anpassen) -->
+    <!-- 10% Lauftext unten (Hier Text nach Wunsch anpassen) -->
     <div class="ticker-container">
         <div class="ticker-text">
             Herzlich willkommen beim Remscheider Turnverein! &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; Nächste Vorstandssitzung am Dienstag um 19:00 Uhr. &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; Hallenbelegung beachten!
@@ -104,28 +106,25 @@
     </div>
 
     <script>
-        const canvaUrl = "https://www.canva.com/design/DAHYp2BSPNE/sZeaoVpePLgLI1juwcKHUQ/view?utm_content=DAHYp2BSPNE&utm_campaign=designshare&utm_medium=link&utm_source=viewer";
         const iframeBox = document.getElementById('iframe-box');
         const defaultImg = document.getElementById('default-image');
+        let isLoaded = false;
 
-        // Prüfen, ob die Canva-URL erreichbar ist
-        fetch(canvaUrl, { method: 'HEAD', mode: 'no-cors' })
-            .then(response => {
-                defaultImg.style.display = 'none';
-                iframeBox.style.display = 'block';
-            })
-            .catch(error => {
-                console.log("Canva nicht erreichbar, zeige Fallback-Bild.");
-            });
+        function showIframe() {
+            isLoaded = true;
+            defaultImg.style.display = 'none';
+            iframeBox.style.display = 'block';
+        }
 
-        // Sicherheits-Timer (Falls das Laden länger als 5 Sekunden dauert)
+        // Sicherheits-Timer: Falls Canva nach 5 Sekunden nicht lädt, bleibt das Fallback-Bild aktiv
         setTimeout(() => {
-            if (iframeBox.style.display === 'none') {
+            if (!isLoaded) {
+                iframeBox.style.display = 'none';
                 defaultImg.style.display = 'block';
             }
         }, 5000);
 
-        // Automatischer Neuladevorgang jede Stunde (3.600.000 ms)
+        // Automatischer Stündlicher Reload (3.600.000 ms), damit Änderungen frisch geladen werden
         setTimeout(() => {
             window.location.reload(true);
         }, 3600000);
