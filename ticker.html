@@ -54,23 +54,31 @@
     <script>
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzK6YcCnY1VhG-Hxq_3_Q_djXFHbfdB-jZ1TnxRRc8CCUJhOhUwlgtARC2pyWO3zFLdEA/exec";
 
-        function fetchTickerText() {
-            fetch(GOOGLE_SCRIPT_URL)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.text) {
-                        // Der Text wird mit ausreichend Abstand verdoppelt, damit er lückenlos übergeht
-                        const baseText = data.text + " &nbsp;&nbsp;&nbsp;&nbsp;+++&nbsp;&nbsp;&nbsp;&nbsp; ";
-                        document.getElementById('ticker').innerHTML = baseText + baseText;
-                    }
-                })
-                .catch(error => {
-                    console.error("Fehler beim Laden des Tickers:", error);
-                });
-        }
+      function fetchTickerText() {
+    // Verhindert aggressive Browser-Caches durch Zeitstempel (?_t=...)
+    const fetchUrl = GOOGLE_SCRIPT_URL + "?_t=" + new Date().getTime();
+
+    fetch(fetchUrl)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Netzwerk-Antwort war nicht OK: " + response.status);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data && data.text) {
+                const baseText = data.text + " &nbsp;&nbsp;&nbsp;&nbsp;+++&nbsp;&nbsp;&nbsp;&nbsp; ";
+                document.getElementById('ticker').innerHTML = baseText + baseText;
+            }
+        })
+        .catch(error => {
+            // Bei 502 oder Netzwerkfehlern behält der Ticker stumm den aktuellen Text bei
+            console.warn("Ticker-Update übersprungen (Server ausgelastet):", error);
+        });
+}
 
         fetchTickerText();
-        setInterval(fetchTickerText, 60000); // Alle 60 Sekunden aktualisieren
+        setInterval(fetchTickerText, 180000); // Alle 60 Sekunden aktualisieren
     </script>
 </body>
 </html>
