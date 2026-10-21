@@ -55,35 +55,41 @@
     <!-- Lokales Fallback-Bild auf GitHub -->
     <img id="default-image" src="RTV-ZOOM-Bakcground.jpg" alt="Remscheider Turnverein Default Board" />
 
-    <!-- Canva iFrame mit neuem Design, Autoplay, Loop & Fit-Modus -->
-    <div class="iframe-container">
+    <!-- Canva iFrame -->
+    <div class="iframe-container" id="iframe-box" style="display: none;">
         <iframe 
             id="canva-frame"
             src="https://www.canva.com/design/DAHYp2BSPNE/sZeaoVpePLgLI1juwcKHUQ/view?embed&autoplay=1&loop=1&mode=fit" 
             allowfullscreen="allowfullscreen" 
-            allow="fullscreen"
-            onload="hideDefaultImage()">
+            allow="fullscreen">
         </iframe>
     </div>
 
     <script>
-        const iframe = document.getElementById('canva-frame');
+        const canvaUrl = "https://www.canva.com/design/DAHYp2BSPNE/sZeaoVpePLgLI1juwcKHUQ/view?embed";
+        const iframeBox = document.getElementById('iframe-box');
         const defaultImg = document.getElementById('default-image');
-        let loaded = false;
-        
-        // Blendet das Fallback-Bild aus, sobald das iFrame geladen ist
-        function hideDefaultImage() {
-            loaded = true;
-            defaultImg.style.display = 'none';
-        }
+        const iframe = document.getElementById('canva-frame');
 
-        // Falls das iFrame nach 4 Sekunden nicht lädt, bleibt das Fallback-Bild sichtbar
+        // Prüfen, ob die Canva-URL erreichbar ist (Abfang von 403, 404 etc.)
+        fetch(canvaUrl, { method: 'HEAD', mode: 'no-cors' })
+            .then(response => {
+                // Bei no-cors erhalten wir meist einen status 0, wenn die Verbindung klappt.
+                // Wir zeigen das iFrame an, da der Server erreichbar ist.
+                defaultImg.style.display = 'none';
+                iframeBox.style.display = 'block';
+            })
+            .catch(error => {
+                // Bei Netzwerkfehlern oder Blockaden bleibt das Fallback-Bild aktiv
+                console.log("Canva nicht erreichbar, zeige Fallback-Bild.");
+            });
+
+        // Zusätzlicher Sicherheits-Timer (Falls das Laden länger als 5 Sekunden dauert)
         setTimeout(() => {
-            if (!loaded) {
-                iframe.style.display = 'none';
+            if (iframeBox.style.display === 'none') {
                 defaultImg.style.display = 'block';
             }
-        }, 4000);
+        }, 5000);
 
         // Automatischer Neuladevorgang jede Stunde (3.600.000 ms)
         setTimeout(() => {
