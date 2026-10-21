@@ -5,26 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vereins-Infoboard</title>
     <style>
-        body {
+        body, html {
             margin: 0;
             padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
             background-color: #000000;
-            color: #ffffff;
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
         }
     </style>
-    <script>
-        // Leitet den Browser direkt auf die native Google Slides Vollbild-Ansicht weiter (ohne Iframe)
-        const SLIDES_URL = "https://docs.google.com/presentation/d/e/2PACX-1vS6FISkOWah7vDfoTksdmtnKHjcwhseKtcHiUtf38DiKiDWwDJmEZSFkewOLSAytIgkqu7JZndHkYa6/pub?start=true&loop=true&delayms=30000";
-        
-        window.location.replace(SLIDES_URL);
-    </script>
 </head>
 <body>
-    <p>Lade Vereins-Infoboard...</p>
+    <iframe src="https://armadillo-qccv5p.my.canva.site/" allowfullscreen></iframe>
 </body>
 </html>
