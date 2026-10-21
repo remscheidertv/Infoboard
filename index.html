@@ -16,7 +16,7 @@
             overflow: hidden;
             background-color: #000000;
         }
-        /* Wrapper füllt den Bildschirm und schneidet überstehendes ab */
+        /* Container füllt den Bildschirm und schneidet überstehende Ränder ab */
         #iframeWrapper {
             width: 100vw;
             height: 100vh;
@@ -24,7 +24,7 @@
             position: relative;
             background-color: #000000;
         }
-        /* Das Iframe wird oben fixiert und nach unten hin aufgezogen, um den Balken zu verbergen */
+        /* Fixiert das Iframe oben und zoomt es minimal ein, um den unteren Balken auszublenden */
         #slidesFrame {
             width: 100vw;
             height: 100vh;
@@ -33,8 +33,8 @@
             position: absolute;
             top: 0;
             left: 0;
-            transform: scale(1.08); /* Vergrößert die Ansicht leicht */
-            transform-origin: top center; /* Hält die Oberkante fest und schiebt den unteren Balken aus dem Bild */
+            transform: scale(1.08);
+            transform-origin: top center;
         }
         /* Fallback-Bild Container bei Verbindungsausfall */
         #fallbackContainer {
@@ -62,19 +62,15 @@
         <iframe id="slidesFrame" src="" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
     </div>
 
-    <!-- Notfall-Bild bei Ladeproblemen / Internet-Ausfall -->
+    <!-- Notfall-Bild bei Ladeproblemen oder Internet-Ausfall -->
     <div id="fallbackContainer">
         <img id="fallbackImg" src="" alt="Infoboard offline">
     </div>
 
     <script>
-        // 1. DEINE GOOGLE SLIDES URL
+        // Konfiguration
         const SLIDES_URL = "https://docs.google.com/presentation/d/e/2PACX-1vS6FISkOWah7vDfoTksdmtnKHjcwhseKtcHiUtf38DiKiDWwDJmEZSFkewOLSAytIgkqu7JZndHkYa6/pub?start=true&loop=true&delayms=30000";
-
-        // 2. DEIN NOTFALL-BILD
         const FALLBACK_IMAGE_URL = "RTV-ZOOM-Bakcground.jpg"; 
-
-        // 3. SEITEN-RELOAD INTERVALL IN MINUTEN
         const RELOAD_INTERVAL_MINUTES = 60;
 
         const iframe = document.getElementById('slidesFrame');
@@ -83,16 +79,16 @@
 
         let isLoaded = false;
 
-        // URL in das Iframe einfügen
+        // Präsentations-URL in das Iframe laden
         iframe.src = SLIDES_URL;
 
-        // Bei erfolgreichem Laden Fallback verbergen
+        // Bei erfolgreichem Laden das Fallback-Bild verstecken
         iframe.onload = function() {
             isLoaded = true;
             fallback.style.display = 'none';
         };
 
-        // Sicherheits-Timer: Wenn nach 10 Sekunden nichts geladen ist, Notfallbild zeigen
+        // Sicherheits-Timer: Wenn nach 10 Sekunden kein Laden erfolgt ist, Fallback-Bild anzeigen
         setTimeout(function() {
             if (!isLoaded) {
                 fallbackImg.src = FALLBACK_IMAGE_URL;
@@ -100,7 +96,7 @@
             }
         }, 10000);
 
-        // Automatischer Reload im Hintergrund
+        // Automatischer Reload der Seite nach der angegebenen Stundenzahl (verhindert Speicherlecks)
         setTimeout(function() {
             location.reload();
         }, RELOAD_INTERVAL_MINUTES * 60 * 1000);
