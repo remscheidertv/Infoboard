@@ -15,27 +15,13 @@
             height: 100%;
             overflow: hidden;
             background-color: #000000;
-            position: relative;
         }
+        /* Iframe wird leicht nach unten gestreckt, um die pubembed-Steuerungsleiste auszusperren */
         iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
             width: 100vw;
-            height: 100vh;
-            border: none;
+            height: calc(100vh + 30px);
+            border: 0;
             display: block;
-        }
-        /* Unsichtbares Schild (Cover), das die untere Google-Leiste perfekt abdeckt */
-        #leistenAbdeckung {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100vw;
-            height: 45px; /* Höhe der Google-Leiste */
-            background-color: #000000; /* Schwarz, damit es zum Rand passt */
-            z-index: 5;
-            pointer-events: none; /* Klicks gehen durch, falls nötig */
         }
         /* Fallback-Bild Container */
         #fallbackContainer {
@@ -61,22 +47,19 @@
 
     <iframe id="slidesFrame" src="" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
 
-    <!-- Deckt die Google-Leiste unten komplett ab -->
-    <div id="leistenAbdeckung"></div>
-
     <!-- Notfall-Bild bei Ladeproblemen / Internet-Ausfall -->
     <div id="fallbackContainer">
         <img id="fallbackImg" src="" alt="Infoboard offline">
     </div>
 
     <script>
-        // 1. GOOGLE SLIDES EMBED-LINK
-        const SLIDES_EMBED_URL = "https://docs.google.com/presentation/d/e/2PACX-1vS6FISkOWah7vDfoTksdmtnKHjcwhseKtcHiUtf38DiKiDWwDJmEZSFkewOLSAytIgkqu7JZndHkYa6/embed?start=true&loop=true&delayms=10000&rm=minimal";
+        // 1. DEINE EXAKTE GOOGLE SLIDES PUBEMBED-URL
+        const SLIDES_URL = "https://docs.google.com/presentation/d/e/2PACX-1vS6FISkOWah7vDfoTksdmtnKHjcwhseKtcHiUtf38DiKiDWwDJmEZSFkewOLSAytIgkqu7JZndHkYa6/pubembed?start=true&loop=true&delayms=30000";
 
-        // 2. NAME DES NOTFALL-BILDES
+        // 2. NOTFALL-BILD
         const FALLBACK_IMAGE_URL = "RTV-ZOOM-Bakcground.jpg"; 
 
-        // 3. SEITEN-RELOAD INTERVALL IN MINUTEN
+        // 3. SEITEN-RELOAD INTERVALL IN MINUTEN (Schützt vor Speicher-Lags auf dem Stick)
         const RELOAD_INTERVAL_MINUTES = 60;
 
         const iframe = document.getElementById('slidesFrame');
@@ -85,16 +68,16 @@
 
         let isLoaded = false;
 
-        // URL in das Iframe einfügen
-        iframe.src = SLIDES_EMBED_URL;
+        // Exakte URL setzen
+        iframe.src = SLIDES_URL;
 
-        // Bei erfolgreichem Laden Fallback ausblenden
+        // Bei erfolgreichem Laden Fallback verbergen
         iframe.onload = function() {
             isLoaded = true;
             fallback.style.display = 'none';
         };
 
-        // Sicherheits-Timer: Wenn nach 10 Sek. kein erfolgreicher Load erfolgt, Notfall-Bild zeigen
+        // Sicherheits-Timer: Wenn nach 10 Sekunden nichts geladen ist, Notfallbild zeigen
         setTimeout(function() {
             if (!isLoaded) {
                 fallbackImg.src = FALLBACK_IMAGE_URL;
