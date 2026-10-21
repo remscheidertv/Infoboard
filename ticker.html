@@ -3,39 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RTV Ticker Seamless</title>
+    <title>RTV Ticker Direct CSV</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            width: 100vw;
-            height: 100vh;
-            background-color: #111111;
-            color: #ffcc00; /* RTV-Gold/Gelb */
+            width: 100vw; height: 100vh;
+            background-color: #111111; color: #ffcc00;
             font-family: Arial, sans-serif;
-            display: flex;
-            align-items: center;
-            overflow: hidden;
+            display: flex; align-items: center; overflow: hidden;
         }
-
-        .ticker-wrap {
-            width: 100vw;
-            overflow: hidden;
-            white-space: nowrap;
-        }
-
-        /* Nahtlose Animation: Verschiebt exakt um 50%, da der Inhalt gedoppelt ist */
+        .ticker-wrap { width: 100vw; overflow: hidden; white-space: nowrap; }
         .ticker-move {
-            display: inline-block;
-            white-space: nowrap;
+            display: inline-block; white-space: nowrap;
             animation: marquee 35s linear infinite;
-            font-size: 5vh;
-            font-weight: bold;
+            font-size: 5vh; font-weight: bold;
         }
-
         @keyframes marquee {
             0% { transform: translate3d(0, 0, 0); }
             100% { transform: translate3d(-50%, 0, 0); }
@@ -43,41 +25,34 @@
     </style>
 </head>
 <body>
-
     <div class="ticker-wrap">
-        <div class="ticker-move" id="ticker">
-            Lade aktuelle Vereinsinfos...
-        </div>
+        <div class="ticker-move" id="ticker">Lade aktuelle Vereinsinfos...</div>
     </div>
 
     <script>
-        // DEINE GOOGLE SCRIPT WEB-APP URL:
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzK6YcCnY1VhG-Hxq_3_Q_djXFHbfdB-jZ1TnxRRc8CCUJhOhUwlgtARC2pyWO3zFLdEA/exec";
+        // TRAGE HIER DEINEN VERÖFFENTLICHEN GOOGLE CSV-LINK EIN:
+        const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS-MlMxLxCN3LsMVlKioQCKZ93j0P-p70M1LP52dM9vOft_rGpcFbgIL2FnXnlFQiBvmKX6xLVD_ES-/pub?gid=0&single=true&output=csv";
 
         function fetchTickerText() {
-            // Zeitstempel verhindert 502/Caching-Probleme
-            const fetchUrl = GOOGLE_SCRIPT_URL + "?_t=" + new Date().getTime();
-
-            fetch(fetchUrl)
-                .then(response => {
-                    if (!response.ok) throw new Error("Netzwerkfehler");
-                    return response.json();
-                })
-                .then(data => {
-                    if (data && data.text) {
-                        // Fügt ausreichend Abstand an und verdoppelt den Inhalt lückenlos
-                        const formattedText = data.text + " &nbsp;&nbsp;&nbsp;&nbsp;+++&nbsp;&nbsp;&nbsp;&nbsp; ";
-                        document.getElementById('ticker').innerHTML = formattedText + formattedText;
+            fetch(CSV_URL)
+                .then(response => response.text())
+                .then(text => {
+                    // Zeilen aufbrechen und leere Zeilen filtern
+                    const lines = text.split('\n')
+                                      .map(l => l.replace(/^"|"$/g, '').trim())
+                                      .filter(l => l.length > 0 && !l.startsWith("Aktueller Text"));
+                    
+                    if (lines.length > 0) {
+                        const combinedText = lines.join(" +++ ") + " &nbsp;&nbsp;&nbsp;&nbsp;+++&nbsp;&nbsp;&nbsp;&nbsp; ";
+                        document.getElementById('ticker').innerHTML = combinedText + combinedText;
                     }
                 })
-                .catch(error => {
-                    console.warn("Update übersprungen, behalte aktuellen Text:", error);
-                });
+                .catch(err => console.warn("Fehler beim Laden der CSV:", err));
         }
 
-        // Beim Start ausführen und alle 3 Minuten erneuern
         fetchTickerText();
-        setInterval(fetchTickerText, 900000);
+        // Alle 10 Minuten aktualisieren
+        setInterval(fetchTickerText, 600000);
     </script>
 </body>
 </html>
