@@ -16,19 +16,29 @@
             overflow: hidden;
             background-color: #000000;
         }
-        
-        /* Vollbild-iFrame */
-        iframe {
+
+        /* Container schneidet den unteren Canva-Balken ab */
+        .iframe-container {
             position: absolute;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Skaliert das iFrame leicht höher, um die Statusleiste nach unten herauszuschieben */
+        iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 106vh; /* 6% höher gegen die Canva-Navigationsleiste */
             border: none;
             z-index: 2;
         }
 
-        /* Default-Bild/Fallback hinter oder statt dem iFrame */
+        /* Fallback-Bild, falls Canva nicht/verzögert lädt */
         #default-image {
             position: absolute;
             top: 0;
@@ -42,41 +52,40 @@
 </head>
 <body>
 
-    <!-- Fallback-Bild (Zeigt deinen Vereinshintergrund oder ein Logo) -->
+    <!-- Default-/Fallback-Bild -->
     <img id="default-image" src="https://via.placeholder.com/1920x1080/000000/ffffff?text=Remscheider+Turnverein+Infoboard" alt="Default Infoboard" />
 
-    <!-- Canva iFrame mit Autoplay-Parametern -->
-    <iframe 
-        id="canva-frame"
-        src="https://www.canva.com/design/DAHYp2BSPNE/I5b7pjczp5wr3wBzGigByw/view?embed&autoplay=1" 
-        allowfullscreen="allowfullscreen" 
-        allow="fullscreen"
-        onload="hideDefaultImage()">
-    </iframe>
+    <!-- Canva iFrame mit Autoplay & Loop -->
+    <div class="iframe-container">
+        <iframe 
+            id="canva-frame"
+            src="https://www.canva.com/design/DAHYp2BSPNE/I5b7pjczp5wr3wBzGigByw/view?embed&autoplay=1&loop=1" 
+            allowfullscreen="allowfullscreen" 
+            allow="fullscreen"
+            onload="hideDefaultImage()">
+        </iframe>
+    </div>
 
     <script>
-        // 1. iFrame-Sicherheits-Check:
-        // Falls das iFrame nicht innerhalb von 4 Sekunden lädt/blockiert wird, bleibt das Defaultbild sichtbar
         const iframe = document.getElementById('canva-frame');
         const defaultImg = document.getElementById('default-image');
-        
         let loaded = false;
         
+        // Blendet das Default-Bild aus, sobald das iFrame vollständig geladen ist
         function hideDefaultImage() {
             loaded = true;
-            // Bild ausblenden sobald iFrame geladen ist
             defaultImg.style.display = 'none';
         }
 
+        // Falls das iFrame nach 4 Sekunden nicht geladen hat, bleibt/wird das Fallback-Bild angezeigt
         setTimeout(() => {
             if (!loaded) {
-                // iFrame konnte nicht geladen werden -> iFrame verbergen, Default-Bild anzeigen
                 iframe.style.display = 'none';
                 defaultImg.style.display = 'block';
             }
         }, 4000);
 
-        // 2. Automatischer Reload 1x pro Stunde (3600000 ms) um Canva-Updates einzuspielen
+        // Automatischer Reload 1x pro Stunde (3.600.000 Millisekunden)
         setTimeout(() => {
             window.location.reload(true);
         }, 3600000);
