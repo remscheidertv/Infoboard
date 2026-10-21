@@ -24,6 +24,7 @@
             position: relative;
             background-color: #000000;
         }
+        /* Iframe füllt wieder den gesamten Bildschirm aus */
         #slidesFrame {
             width: 100vw;
             height: 100vh;
@@ -34,20 +35,20 @@
             left: 0;
         }
         
-        /* Eigener Infobalken, der über dem unteren Rand liegt und die Google-Leiste verdeckt */
+        /* Der Balken legt sich dank z-index: 10 absolut ÜBER das Iframe am unteren Rand */
         #customBottomBar {
             position: absolute;
             bottom: 0;
             left: 0;
             width: 100vw;
-            height: 45px; /* Höhe des Balkens – bei Bedarf anpassbar */
-            background-color: #002b5c; /* Vereinsfarbe (z.B. dunkles Blau) oder #000000 für Schwarz */
+            height: 45px;
+            background-color: #002b5c; /* Vereinsfarbe (Blau) – anpassbar (#000000 für Schwarz) */
             color: #ffffff;
             display: flex;
             align-items: center;
-            z-index: 5;
+            z-index: 10; /* Zwingt den Balken in den Vordergrund über das Iframe */
             overflow: hidden;
-            border-top: 2px solid #ffcc00; /* Optionaler Akzentstrich oben */
+            border-top: 2px solid #ffcc00; /* Optionaler gelber Akzentstrich */
         }
 
         /* Styling für den Lauftext */
@@ -61,7 +62,7 @@
         .marquee-text {
             display: inline-block;
             padding-left: 100%;
-            animation: marquee 25s linear infinite; /* 25s = Geschwindigkeit (je kleiner, desto schneller) */
+            animation: marquee 25s linear infinite; /* Geschwindigkeit (je kleiner, desto schneller) */
             font-size: 20px;
             font-weight: bold;
             color: #ffffff;
@@ -78,7 +79,7 @@
     <div id="iframeWrapper">
         <iframe id="slidesFrame" src="" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
         
-        <!-- Eigener unterer Balken mit Lauftext zur Überdeckung der Google-Leiste -->
+        <!-- Dieser Balken schwebt nun direkt über dem Iframe am unteren Bildschirmrand -->
         <div id="customBottomBar">
             <div class="marquee-container">
                 <span class="marquee-text">
