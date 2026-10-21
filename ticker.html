@@ -13,16 +13,16 @@
         body {
             width: 100vw;
             height: 100vh;
-            background-color: #000066;
-            color: #fff; /* RTV-Gold/Gelb */
-            font-family: Ubuntu, sans-serif;
+            background-color: #111111;
+            color: #ffcc00; /* RTV-Gold/Gelb */
+            font-family: Arial, sans-serif;
             display: flex;
             align-items: center;
             overflow: hidden;
         }
         .ticker-text {
             white-space: nowrap;
-            animation: ticker 25s linear infinite;
+            animation: ticker 30s linear infinite;
             font-size: 5vh;
             font-weight: bold;
         }
@@ -35,17 +35,31 @@
 <body>
 
     <div class="ticker-text" id="ticker">
-        Herzlich willkommen beim Remscheider Turnverein! &nbsp;&nbsp;|&nbsp;&nbsp; Bitte beachten Sie die aktuellen Hallenzeiten.
+        Lade aktuelle Vereinsinfos...
     </div>
 
     <script>
-        // Liest den Parameter ?text=... aus der URL aus, falls vorhanden
-        const urlParams = new URLSearchParams(window.location.search);
-        const customText = urlParams.get('text');
+        // TRAGE HIER DEINE GOOGLE SCRIPT WEB-APP URL EIN:
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzK6YcCnY1VhG-Hxq_3_Q_djXFHbfdB-jZ1TnxRRc8CCUJhOhUwlgtARC2pyWO3zFLdEA/exec";
 
-        if (customText) {
-            document.getElementById('ticker').innerHTML = decodeURIComponent(customText);
+        function fetchTickerText() {
+            fetch(GOOGLE_SCRIPT_URL)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.text) {
+                        document.getElementById('ticker').innerHTML = data.text;
+                    }
+                })
+                .catch(error => {
+                    console.error("Fehler beim Laden des Tickers:", error);
+                });
         }
+
+        // Text beim Start laden
+        fetchTickerText();
+
+        // Text alle 60 Sekunden automatisch im Hintergrund aktualisieren
+        setInterval(fetchTickerText, 60000);
     </script>
 </body>
 </html>
