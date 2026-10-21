@@ -17,38 +17,28 @@
             background-color: #000000;
             font-family: Arial, sans-serif;
         }
-        #iframeWrapper {
-            width: 100vw;
-            height: 100vh;
-            overflow: hidden;
-            position: relative;
-            background-color: #000000;
-        }
-        /* Iframe füllt wieder den gesamten Bildschirm aus */
+        
+        /* Das Iframe füllt den Bildschirm aus, hört aber exakt 45px vor dem Boden auf */
         #slidesFrame {
             width: 100vw;
-            height: 100vh;
+            height: calc(100vh - 45px);
             border: 0;
             display: block;
-            position: absolute;
-            top: 0;
-            left: 0;
         }
         
-        /* Der Balken legt sich dank z-index: 10 absolut ÜBER das Iframe am unteren Rand */
+        /* Der untere Balken sitzt fest im freien Bereich am Boden */
         #customBottomBar {
-            position: absolute;
+            position: fixed;
             bottom: 0;
             left: 0;
             width: 100vw;
             height: 45px;
-            background-color: #002b5c; /* Vereinsfarbe (Blau) – anpassbar (#000000 für Schwarz) */
+            background-color: #002b5c; /* Vereinsfarbe Blau – anpassbar */
             color: #ffffff;
             display: flex;
             align-items: center;
-            z-index: 10; /* Zwingt den Balken in den Vordergrund über das Iframe */
             overflow: hidden;
-            border-top: 2px solid #ffcc00; /* Optionaler gelber Akzentstrich */
+            border-top: 2px solid #ffcc00; /* Gelber Akzentstrich */
         }
 
         /* Styling für den Lauftext */
@@ -62,7 +52,7 @@
         .marquee-text {
             display: inline-block;
             padding-left: 100%;
-            animation: marquee 25s linear infinite; /* Geschwindigkeit (je kleiner, desto schneller) */
+            animation: marquee 25s linear infinite; /* Geschwindigkeit (kleiner = schneller) */
             font-size: 20px;
             font-weight: bold;
             color: #ffffff;
@@ -76,18 +66,17 @@
 </head>
 <body>
 
-    <div id="iframeWrapper">
-        <iframe id="slidesFrame" src="" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
-        
-        <!-- Dieser Balken schwebt nun direkt über dem Iframe am unteren Bildschirmrand -->
-        <div id="customBottomBar">
-            <div class="marquee-container">
-                <span class="marquee-text">
-                    📢 Nächster Erste-Hilfe-Kurs am DRK-Kurstermin beachten! &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; 
-                    Bei Fragen an den Sportbereich wenden &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; 
-                    Viel Spaß im Training beim RTV!
-                </span>
-            </div>
+    <!-- Präsentation im oberen Bereich -->
+    <iframe id="slidesFrame" src="" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+    
+    <!-- Eigener unterer Balken mit Lauftext im freien Bereich -->
+    <div id="customBottomBar">
+        <div class="marquee-container">
+            <span class="marquee-text">
+                📢 Nächster Erste-Hilfe-Kurs am DRK-Kurstermin beachten! &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; 
+                Bei Fragen an den Sportbereich wenden &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; 
+                Viel Spaß im Training beim RTV!
+            </span>
         </div>
     </div>
 
@@ -96,10 +85,10 @@
         const SLIDES_URL = "https://docs.google.com/presentation/d/e/2PACX-1vS6FISkOWah7vDfoTksdmtnKHjcwhseKtcHiUtf38DiKiDWwDJmEZSFkewOLSAytIgkqu7JZndHkYa6/pubembed?start=true&loop=true&delayms=30000";
         const RELOAD_INTERVAL_MINUTES = 60;
 
-        // Präsentations-URL in das Iframe laden
+        // Präsentations-URL laden
         document.getElementById('slidesFrame').src = SLIDES_URL;
 
-        // Automatischer Reload der Seite nach einer Stunde (verhindert Speicherlecks)
+        // Automatischer Reload nach einer Stunde
         setTimeout(function() {
             location.reload();
         }, RELOAD_INTERVAL_MINUTES * 60 * 1000);
