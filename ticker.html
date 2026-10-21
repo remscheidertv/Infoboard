@@ -21,17 +21,16 @@
             overflow: hidden;
         }
 
-        /* Container für den fließenden Übergang */
         .ticker-wrap {
             width: 100vw;
             overflow: hidden;
             white-space: nowrap;
         }
 
+        /* Nahtlose Animation: Verschiebt exakt um 50%, da der Inhalt gedoppelt ist */
         .ticker-move {
             display: inline-block;
             white-space: nowrap;
-            padding-left: 100%;
             animation: marquee 35s linear infinite;
             font-size: 5vh;
             font-weight: bold;
@@ -39,7 +38,7 @@
 
         @keyframes marquee {
             0% { transform: translate3d(0, 0, 0); }
-            100% { transform: translate3d(-50%, 0, 0); } /* Verschiebt nur um die Hälfte, da der Text verdoppelt wird */
+            100% { transform: translate3d(-50%, 0, 0); }
         }
     </style>
 </head>
@@ -52,33 +51,33 @@
     </div>
 
     <script>
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzK6YcCnY1VhG-Hxq_3_Q_djXFHbfdB-jZ1TnxRRc8CCUJhOhUwlgtARC2pyWO3zFLdEA/exec";
+        // DEINE GOOGLE SCRIPT WEB-APP URL:
+        const GOOGLE_SCRIPT_URL = "HIER_DEINE_WEB_APP_URL_EINFÜGEN";
 
-      function fetchTickerText() {
-    // Verhindert aggressive Browser-Caches durch Zeitstempel (?_t=...)
-    const fetchUrl = GOOGLE_SCRIPT_URL + "?_t=" + new Date().getTime();
+        function fetchTickerText() {
+            // Zeitstempel verhindert 502/Caching-Probleme
+            const fetchUrl = GOOGLE_SCRIPT_URL + "?_t=" + new Date().getTime();
 
-    fetch(fetchUrl)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Netzwerk-Antwort war nicht OK: " + response.status);
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data && data.text) {
-                const baseText = data.text + " &nbsp;&nbsp;&nbsp;&nbsp;+++&nbsp;&nbsp;&nbsp;&nbsp; ";
-                document.getElementById('ticker').innerHTML = baseText + baseText;
-            }
-        })
-        .catch(error => {
-            // Bei 502 oder Netzwerkfehlern behält der Ticker stumm den aktuellen Text bei
-            console.warn("Ticker-Update übersprungen (Server ausgelastet):", error);
-        });
-}
+            fetch(fetchUrl)
+                .then(response => {
+                    if (!response.ok) throw new Error("Netzwerkfehler");
+                    return response.json();
+                })
+                .then(data => {
+                    if (data && data.text) {
+                        // Fügt ausreichend Abstand an und verdoppelt den Inhalt lückenlos
+                        const formattedText = data.text + " &nbsp;&nbsp;&nbsp;&nbsp;+++&nbsp;&nbsp;&nbsp;&nbsp; ";
+                        document.getElementById('ticker').innerHTML = formattedText + formattedText;
+                    }
+                })
+                .catch(error => {
+                    console.warn("Update übersprungen, behalte aktuellen Text:", error);
+                });
+        }
 
+        // Beim Start ausführen und alle 3 Minuten erneuern
         fetchTickerText();
-        setInterval(fetchTickerText, 180000); // Alle 60 Sekunden aktualisieren
+        setInterval(fetchTickerText, 180000);
     </script>
 </body>
 </html>
