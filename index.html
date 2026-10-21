@@ -17,7 +17,7 @@
             background-color: #000000;
         }
 
-        /* Container schneidet die untere Canva-Statusleiste ab */
+        /* Container schneidet die untere Canva-Leiste ab */
         .iframe-container {
             position: absolute;
             top: 0;
@@ -27,7 +27,7 @@
             overflow: hidden;
         }
 
-        /* Skaliert das iFrame auf 106vh, um den Canva-Balken unten herauszuschieben */
+        /* Skaliert das iFrame auf 106vh, um den unteren Balken herauszuschieben */
         iframe {
             position: absolute;
             top: 0;
@@ -55,36 +55,32 @@
     <!-- Lokales Fallback-Bild auf GitHub -->
     <img id="default-image" src="RTV-ZOOM-Bakcground.jpg" alt="Remscheider Turnverein Default Board" />
 
-    <!-- Canva iFrame -->
+    <!-- Canva iFrame mit direktem Präsentations-Link -->
     <div class="iframe-container" id="iframe-box" style="display: none;">
         <iframe 
             id="canva-frame"
-            src="https://www.canva.com/design/DAHYp2BSPNE/sZeaoVpePLgLI1juwcKHUQ/view?embed&autoplay=1&loop=1&mode=fit" 
+            src="https://www.canva.com/design/DAHYp2BSPNE/sZeaoVpePLgLI1juwcKHUQ/view?utm_content=DAHYp2BSPNE&utm_campaign=designshare&utm_medium=link&utm_source=viewer" 
             allowfullscreen="allowfullscreen" 
             allow="fullscreen">
         </iframe>
     </div>
 
     <script>
-        const canvaUrl = "https://www.canva.com/design/DAHYp2BSPNE/sZeaoVpePLgLI1juwcKHUQ/view?embed";
+        const canvaUrl = "https://www.canva.com/design/DAHYp2BSPNE/sZeaoVpePLgLI1juwcKHUQ/view?utm_content=DAHYp2BSPNE&utm_campaign=designshare&utm_medium=link&utm_source=viewer";
         const iframeBox = document.getElementById('iframe-box');
         const defaultImg = document.getElementById('default-image');
-        const iframe = document.getElementById('canva-frame');
 
-        // Prüfen, ob die Canva-URL erreichbar ist (Abfang von 403, 404 etc.)
+        // Prüfen, ob die Canva-URL erreichbar ist
         fetch(canvaUrl, { method: 'HEAD', mode: 'no-cors' })
             .then(response => {
-                // Bei no-cors erhalten wir meist einen status 0, wenn die Verbindung klappt.
-                // Wir zeigen das iFrame an, da der Server erreichbar ist.
                 defaultImg.style.display = 'none';
                 iframeBox.style.display = 'block';
             })
             .catch(error => {
-                // Bei Netzwerkfehlern oder Blockaden bleibt das Fallback-Bild aktiv
                 console.log("Canva nicht erreichbar, zeige Fallback-Bild.");
             });
 
-        // Zusätzlicher Sicherheits-Timer (Falls das Laden länger als 5 Sekunden dauert)
+        // Sicherheits-Timer: Falls das Laden länger als 5 Sekunden dauert
         setTimeout(() => {
             if (iframeBox.style.display === 'none') {
                 defaultImg.style.display = 'block';
