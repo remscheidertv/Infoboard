@@ -16,6 +16,7 @@
             overflow: hidden;
             background-color: #000000;
         }
+        /* Der Wrapper schneidet alles ab, was über den Bildschirm hinausragt */
         #iframeWrapper {
             width: 100vw;
             height: 100vh;
@@ -23,9 +24,10 @@
             position: relative;
             background-color: #000000;
         }
+        /* Das Iframe wird 50px höher gezogen, sodass die Google-Leiste unten im unsichtbaren Bereich landet */
         #slidesFrame {
             width: 100vw;
-            height: 100vh;
+            height: calc(100vh + 50px);
             border: 0;
             display: block;
             position: absolute;
@@ -41,14 +43,14 @@
     </div>
 
     <script>
-        // Konfiguration
+        // Konfiguration mit stabiler pubembed-URL
         const SLIDES_URL = "https://docs.google.com/presentation/d/e/2PACX-1vS6FISkOWah7vDfoTksdmtnKHjcwhseKtcHiUtf38DiKiDWwDJmEZSFkewOLSAytIgkqu7JZndHkYa6/pubembed?start=true&loop=true&delayms=30000";
         const RELOAD_INTERVAL_MINUTES = 60;
 
-        // Präsentations-URL direkt in das Iframe laden
+        // Präsentations-URL in das Iframe laden
         document.getElementById('slidesFrame').src = SLIDES_URL;
 
-        // Automatischer Reload der Seite nach der angegebenen Stundenzahl (verhindert Speicherlecks)
+        // Automatischer Reload der Seite nach einer Stunde (verhindert Speicherlecks)
         setTimeout(function() {
             location.reload();
         }, RELOAD_INTERVAL_MINUTES * 60 * 1000);
