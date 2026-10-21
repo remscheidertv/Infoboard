@@ -15,47 +15,78 @@
             height: 100vh;
             overflow: hidden;
             background-color: #000000;
+            font-family: Arial, sans-serif;
         }
 
-        /* Container schneidet alle überstehenden Canva-Leisten ab */
+        /* 90% Höhe für das Canva-Board oben */
         .iframe-container {
             position: absolute;
             top: 0;
             left: 0;
             width: 100vw;
-            height: 100vh;
+            height: 90vh;
             overflow: hidden;
+            background-color: #000000;
         }
 
-        /* iFrame vergrößert und verschoben, um obere und untere Leisten wegzuschneiden */
+        /* iFrame füllt die 90% aus (plus leichte Übergrösse zum Verstecken des Balkens) */
         iframe {
             position: absolute;
-            top: -6vh;
+            top: 0;
             left: 0;
             width: 100vw;
-            height: 112vh;
+            height: 96vh; 
             border: none;
             z-index: 2;
         }
 
-        /* Lokales Fallback-Bild aus dem GitHub-Repository */
+        /* Lokales Fallback-Bild, falls Canva streikt */
         #default-image {
             position: absolute;
             top: 0;
             left: 0;
             width: 100vw;
-            height: 100vh;
+            height: 90vh;
             object-fit: cover;
             z-index: 1;
+        }
+
+        /* 10% Höhe für den Lauftext unten */
+        .ticker-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100vw;
+            height: 10vh;
+            background-color: #111111;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            border-top: 2px solid #333333;
+            z-index: 10;
+        }
+
+        .ticker-text {
+            white-space: nowrap;
+            animation: ticker 25s linear infinite;
+            font-size: calc(3vh + 1vw); /* Skaliert automatisch mit der Bildschirmgrösse */
+            font-weight: bold;
+            color: #ffcc00; /* Auffällige Farbe für den Text, z.B. RTV-Gelb/Gold */
+        }
+
+        @keyframes ticker {
+            0% { transform: translateX(100vw); }
+            100% { transform: translateX(-100%); }
         }
     </style>
 </head>
 <body>
 
-    <!-- Lokales Fallback-Bild auf GitHub -->
+    <!-- Lokales Fallback-Bild auf GitHub (nur im oberen 90%-Bereich) -->
     <img id="default-image" src="RTV-ZOOM-Bakcground.jpg" alt="Remscheider Turnverein Default Board" />
 
-    <!-- Canva iFrame mit direktem Präsentations-Link -->
+    <!-- Canva iFrame im 90%-Bereich -->
     <div class="iframe-container" id="iframe-box" style="display: none;">
         <iframe 
             id="canva-frame"
@@ -63,6 +94,13 @@
             allowfullscreen="allowfullscreen" 
             allow="fullscreen">
         </iframe>
+    </div>
+
+    <!-- 10% Lauftext unten (Hier kannst du den Text beliebig anpassen) -->
+    <div class="ticker-container">
+        <div class="ticker-text">
+            Herzlich willkommen beim Remscheider Turnverein! &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; Nächste Vorstandssitzung am Dienstag um 19:00 Uhr. &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; Hallenbelegung beachten!
+        </div>
     </div>
 
     <script>
@@ -80,7 +118,7 @@
                 console.log("Canva nicht erreichbar, zeige Fallback-Bild.");
             });
 
-        // Sicherheits-Timer: Falls das Laden länger als 5 Sekunden dauert
+        // Sicherheits-Timer (Falls das Laden länger als 5 Sekunden dauert)
         setTimeout(() => {
             if (iframeBox.style.display === 'none') {
                 defaultImg.style.display = 'block';
