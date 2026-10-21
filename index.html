@@ -16,12 +16,22 @@
             overflow: hidden;
             background-color: #000000;
         }
-        /* Exakter Vollbild-Modus ohne Rahmenverzerrung */
-        iframe {
+        /* Dieser Container schneidet den überstehenden unteren Bereich (die Google-Leiste) ab */
+        #iframeWrapper {
             width: 100vw;
             height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+        /* Das Iframe wird höher gezogen, sodass die Google-Leiste unten verschwindet */
+        #slidesFrame {
+            width: 100vw;
+            height: calc(100vh + 50px);
             border: 0;
             display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
         }
         /* Fallback-Bild Container bei Verbindungsausfall */
         #fallbackContainer {
@@ -45,7 +55,9 @@
 </head>
 <body>
 
-    <iframe id="slidesFrame" src="" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+    <div id="iframeWrapper">
+        <iframe id="slidesFrame" src="" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+    </div>
 
     <!-- Notfall-Bild bei Ladeproblemen / Internet-Ausfall -->
     <div id="fallbackContainer">
@@ -53,13 +65,13 @@
     </div>
 
     <script>
-        // 1. DEINE ORIGINALE GOOGLE SLIDES PUBEMBED-URL
+        // 1. DEINE GOOGLE SLIDES PUBEMBED-URL
         const SLIDES_URL = "https://docs.google.com/presentation/d/e/2PACX-1vS6FISkOWah7vDfoTksdmtnKHjcwhseKtcHiUtf38DiKiDWwDJmEZSFkewOLSAytIgkqu7JZndHkYa6/pubembed?start=true&loop=true&delayms=30000";
 
         // 2. DEIN NOTFALL-BILD
         const FALLBACK_IMAGE_URL = "RTV-ZOOM-Bakcground.jpg"; 
 
-        // 3. SEITEN-RELOAD INTERVALL IN MINUTEN (Verhindert Speicher-Lags auf dem Stick)
+        // 3. SEITEN-RELOAD INTERVALL IN MINUTEN
         const RELOAD_INTERVAL_MINUTES = 60;
 
         const iframe = document.getElementById('slidesFrame');
