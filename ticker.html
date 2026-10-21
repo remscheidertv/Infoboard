@@ -3,21 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RTV Ticker Direct CSV</title>
+    <title>RTV Ticker</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         body {
-            width: 100vw; height: 100vh;
-            background-color: #006; color: #fff;
+            width: 100vw;
+            height: 100vh;
+            background-color: #000066; /* RTV Dunkelblau */
+            color: #ffffff; /* Weißer Text */
             font-family: Arial, sans-serif;
-            display: flex; align-items: center; overflow: hidden;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
         }
-        .ticker-wrap { width: 100vw; overflow: hidden; white-space: nowrap; }
+
+        .ticker-wrap {
+            width: 100vw;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
         .ticker-move {
-            display: inline-block; white-space: nowrap;
+            display: inline-block;
+            white-space: nowrap;
             animation: marquee 35s linear infinite;
-            font-size: 5vh; font-weight: bold;
+            font-size: 5vh;
+            font-weight: bold;
         }
+
         @keyframes marquee {
             0% { transform: translate3d(0, 0, 0); }
             100% { transform: translate3d(-50%, 0, 0); }
@@ -25,34 +42,50 @@
     </style>
 </head>
 <body>
+
     <div class="ticker-wrap">
-        <div class="ticker-move" id="ticker">Lade aktuelle Vereinsinfos...</div>
+        <div class="ticker-move" id="ticker">
+            Lade aktuelle Vereinsinfos...
+        </div>
     </div>
 
     <script>
-        // TRAGE HIER DEINEN VERÖFFENTLICHEN GOOGLE CSV-LINK EIN:
         const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS-MlMxLxCN3LsMVlKioQCKZ93j0P-p70M1LP52dM9vOft_rGpcFbgIL2FnXnlFQiBvmKX6xLVD_ES-/pub?gid=0&single=true&output=csv";
 
         function fetchTickerText() {
-            fetch(CSV_URL)
+            // Zeitstempel verhindert Caching-Probleme im Browser
+            const fetchUrl = CSV_URL + "&_t=" + new Date().getTime();
+
+            fetch(fetchUrl)
                 .then(response => response.text())
                 .then(text => {
-                    // Zeilen aufbrechen und leere Zeilen filtern
+                    // Zeilen aufbrechen, Anführungszeichen säubern und leere Zeilen/Kopfzeilen filtern
                     const lines = text.split('\n')
                                       .map(l => l.replace(/^"|"$/g, '').trim())
-                                      .filter(l => l.length > 0 && !l.startsWith("Aktueller Text"));
+                                      .filter(l => l.length > 0 && !l.toLowerCase().startsWith("aktueller text"));
                     
                     if (lines.length > 0) {
-                        const combinedText = lines.join(" +++ ") + " &nbsp;&nbsp;&nbsp;&nbsp;+++&nbsp;&nbsp;&nbsp;&nbsp; ";
-                        document.getElementById('ticker').innerHTML = combinedText + combinedText;
+                        const baseText = lines.join(" &nbsp;&nbsp;&nbsp;&nbsp;+++&nbsp;&nbsp;&nbsp;&nbsp; ") + " &nbsp;&nbsp;&nbsp;&nbsp;+++&nbsp;&nbsp;&nbsp;&nbsp; ";
+                        const tickerElem = document.getElementById('ticker');
+                        
+                        // Text so oft vervielfachen, bis er die zweifache Bildschirmbreite überschreitet
+                        let fullText = baseText;
+                        tickerElem.innerHTML = fullText;
+                        while (tickerElem.offsetWidth < window.innerWidth * 2) {
+                            fullText += baseText;
+                            tickerElem.innerHTML = fullText;
+                        }
+                        
+                        // Exakt verdoppeln für den nahtlosen 50%-Verschiebungs-Loop
+                        tickerElem.innerHTML = fullText + fullText;
                     }
                 })
                 .catch(err => console.warn("Fehler beim Laden der CSV:", err));
         }
 
         fetchTickerText();
-        // Alle 10 Minuten aktualisieren
-        setInterval(fetchTickerText, 600000);
+        // Alle 5 Minuten im Hintergrund aktualisieren
+        setInterval(fetchTickerText, 300000);
     </script>
 </body>
 </html>
