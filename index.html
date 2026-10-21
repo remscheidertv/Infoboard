@@ -16,14 +16,14 @@
             overflow: hidden;
             background-color: #000000;
         }
-        /* Iframe wird leicht nach unten gestreckt, um die pubembed-Steuerungsleiste auszusperren */
+        /* Exakter Vollbild-Modus ohne Rahmenverzerrung */
         iframe {
             width: 100vw;
-            height: calc(100vh + 30px);
+            height: 100vh;
             border: 0;
             display: block;
         }
-        /* Fallback-Bild Container */
+        /* Fallback-Bild Container bei Verbindungsausfall */
         #fallbackContainer {
             position: fixed;
             top: 0;
@@ -53,13 +53,13 @@
     </div>
 
     <script>
-        // 1. DEINE EXAKTE GOOGLE SLIDES PUBEMBED-URL
+        // 1. DEINE ORIGINALE GOOGLE SLIDES PUBEMBED-URL
         const SLIDES_URL = "https://docs.google.com/presentation/d/e/2PACX-1vS6FISkOWah7vDfoTksdmtnKHjcwhseKtcHiUtf38DiKiDWwDJmEZSFkewOLSAytIgkqu7JZndHkYa6/pubembed?start=true&loop=true&delayms=30000";
 
-        // 2. NOTFALL-BILD
+        // 2. DEIN NOTFALL-BILD
         const FALLBACK_IMAGE_URL = "RTV-ZOOM-Bakcground.jpg"; 
 
-        // 3. SEITEN-RELOAD INTERVALL IN MINUTEN (Schützt vor Speicher-Lags auf dem Stick)
+        // 3. SEITEN-RELOAD INTERVALL IN MINUTEN (Verhindert Speicher-Lags auf dem Stick)
         const RELOAD_INTERVAL_MINUTES = 60;
 
         const iframe = document.getElementById('slidesFrame');
@@ -68,7 +68,7 @@
 
         let isLoaded = false;
 
-        // Exakte URL setzen
+        // URL in das Iframe einfügen
         iframe.src = SLIDES_URL;
 
         // Bei erfolgreichem Laden Fallback verbergen
