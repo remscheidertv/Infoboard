@@ -31,8 +31,9 @@
             display: inline-block;
             white-space: nowrap;
             animation: marquee 35s linear infinite;
-            font-size: 5vh;
+            font-size: 80vh; /* Großes Format für optimale Lesbarkeit auf dem TV */
             font-weight: bold;
+            line-height: 1;
         }
 
         @keyframes marquee {
@@ -53,13 +54,11 @@
         const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS-MlMxLxCN3LsMVlKioQCKZ93j0P-p70M1LP52dM9vOft_rGpcFbgIL2FnXnlFQiBvmKX6xLVD_ES-/pub?gid=0&single=true&output=csv";
 
         function fetchTickerText() {
-            // Zeitstempel verhindert Caching-Probleme im Browser
             const fetchUrl = CSV_URL + "&_t=" + new Date().getTime();
 
             fetch(fetchUrl)
                 .then(response => response.text())
                 .then(text => {
-                    // Zeilen aufbrechen, Anführungszeichen säubern und leere Zeilen/Kopfzeilen filtern
                     const lines = text.split('\n')
                                       .map(l => l.replace(/^"|"$/g, '').trim())
                                       .filter(l => l.length > 0 && !l.toLowerCase().startsWith("aktueller text"));
@@ -68,7 +67,6 @@
                         const baseText = lines.join(" &nbsp;&nbsp;&nbsp;&nbsp;+++&nbsp;&nbsp;&nbsp;&nbsp; ") + " &nbsp;&nbsp;&nbsp;&nbsp;+++&nbsp;&nbsp;&nbsp;&nbsp; ";
                         const tickerElem = document.getElementById('ticker');
                         
-                        // Text so oft vervielfachen, bis er die zweifache Bildschirmbreite überschreitet
                         let fullText = baseText;
                         tickerElem.innerHTML = fullText;
                         while (tickerElem.offsetWidth < window.innerWidth * 2) {
@@ -76,7 +74,6 @@
                             tickerElem.innerHTML = fullText;
                         }
                         
-                        // Exakt verdoppeln für den nahtlosen 50%-Verschiebungs-Loop
                         tickerElem.innerHTML = fullText + fullText;
                     }
                 })
@@ -84,7 +81,6 @@
         }
 
         fetchTickerText();
-        // Alle 5 Minuten im Hintergrund aktualisieren
         setInterval(fetchTickerText, 300000);
     </script>
 </body>
