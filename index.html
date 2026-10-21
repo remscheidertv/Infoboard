@@ -16,13 +16,14 @@
             overflow: hidden;
             background-color: #000000;
         }
+        /* Iframe vergrößern und nach unten erweitern, um die untere Google-Leiste abzuschneiden */
         iframe {
             width: 100vw;
-            height: 100vh;
+            height: calc(100vh + 35px);
             border: none;
             display: block;
         }
-        /* Fallback-Bild, das standardmäßig unsichtbar ist */
+        /* Fallback-Bild Container */
         #fallbackContainer {
             position: fixed;
             top: 0;
@@ -46,19 +47,19 @@
 
     <iframe id="slidesFrame" src="" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
 
-    <!-- Notfall-Bild bei Ladeproblemen -->
+    <!-- Notfall-Bild bei Ladeproblemen / Internet-Ausfall -->
     <div id="fallbackContainer">
         <img id="fallbackImg" src="" alt="Infoboard offline">
     </div>
 
     <script>
-        // 1. HIER DEINEN GOOGLE SLIDES EMBED-LINK EINTRAGEN
-        const SLIDES_EMBED_URL = "https://docs.google.com/presentation/d/e/2PACX-1vS6FISkOWah7vDfoTksdmtnKHjcwhseKtcHiUtf38DiKiDWwDJmEZSFkewOLSAytIgkqu7JZndHkYa6/embed?start=true&loop=true&delayms=10000";
+        // 1. GOOGLE SLIDES EMBED-LINK INKLUSIVE "rm=minimal" PARAMETER
+        const SLIDES_EMBED_URL = "https://docs.google.com/presentation/d/e/2PACX-1vS6FISkOWah7vDfoTksdmtnKHjcwhseKtcHiUtf38DiKiDWwDJmEZSFkewOLSAytIgkqu7JZndHkYa6/embed?start=true&loop=true&delayms=10000&rm=minimal";
 
-        // 2. HIER DIE URL DEINES NOTFALL-BILDES EINTRAGEN (z.B. direkt im GitHub-Repo gespeichert)
+        // 2. NAME DES NOTFALL-BILDES (liegt im selben Ordner auf GitHub)
         const FALLBACK_IMAGE_URL = "RTV-ZOOM-Bakcground.jpg"; 
 
-        // 3. ZEIT IN MINUTEN FÜR DEN AUTOMATISCHEN SEITEN-RELOAD
+        // 3. SEITEN-RELOAD INTERVALL IN MINUTEN (Verhindert Speicher-Lags)
         const RELOAD_INTERVAL_MINUTES = 60;
 
         const iframe = document.getElementById('slidesFrame');
@@ -67,16 +68,16 @@
 
         let isLoaded = false;
 
-        // Iframe mit URL füttern
+        // URL in das Iframe einfügen
         iframe.src = SLIDES_EMBED_URL;
 
-        // Prüfen, ob der Iframe erfolgreich lädt
+        // Bei erfolgreichem Laden Fallback ausblenden
         iframe.onload = function() {
             isLoaded = true;
             fallback.style.display = 'none';
         };
 
-        // Sicherheits-Timer: Wenn nach 10 Sekunden (10000 ms) nichts geladen wurde, Fallback zeigen
+        // Sicherheits-Timer: Wenn nach 10 Sek. kein erfolgreicher Load erfolgt, Notfall-Bild zeigen
         setTimeout(function() {
             if (!isLoaded) {
                 fallbackImg.src = FALLBACK_IMAGE_URL;
@@ -84,7 +85,7 @@
             }
         }, 10000);
 
-        // Automatischer Reload der gesamten Seite im Intervall
+        // Automatischer Reload im Hintergrund
         setTimeout(function() {
             location.reload();
         }, RELOAD_INTERVAL_MINUTES * 60 * 1000);
