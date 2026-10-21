@@ -16,12 +16,25 @@
             overflow: hidden;
             background-color: #000000;
         }
-        /* Vollbild-Darstellung ohne Skalierungs-F Verzerrungen */
-        iframe {
+        /* Wrapper füllt den Bildschirm und schneidet überstehendes ab */
+        #iframeWrapper {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+            background-color: #000000;
+        }
+        /* Das Iframe wird oben fixiert und nach unten hin aufgezogen, um den Balken zu verbergen */
+        #slidesFrame {
             width: 100vw;
             height: 100vh;
             border: 0;
             display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform: scale(1.08); /* Vergrößert die Ansicht leicht */
+            transform-origin: top center; /* Hält die Oberkante fest und schiebt den unteren Balken aus dem Bild */
         }
         /* Fallback-Bild Container bei Verbindungsausfall */
         #fallbackContainer {
@@ -45,7 +58,9 @@
 </head>
 <body>
 
-    <iframe id="slidesFrame" src="" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+    <div id="iframeWrapper">
+        <iframe id="slidesFrame" src="" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+    </div>
 
     <!-- Notfall-Bild bei Ladeproblemen / Internet-Ausfall -->
     <div id="fallbackContainer">
@@ -53,7 +68,7 @@
     </div>
 
     <script>
-        // 1. GOOGLE SLIDES URL MIT ANGEPASSTEM PARAMETER FÜR VOLLBILD
+        // 1. DEINE GOOGLE SLIDES URL
         const SLIDES_URL = "https://docs.google.com/presentation/d/e/2PACX-1vS6FISkOWah7vDfoTksdmtnKHjcwhseKtcHiUtf38DiKiDWwDJmEZSFkewOLSAytIgkqu7JZndHkYa6/pub?start=true&loop=true&delayms=30000";
 
         // 2. DEIN NOTFALL-BILD
