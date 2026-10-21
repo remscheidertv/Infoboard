@@ -17,7 +17,7 @@
             background-color: #000000;
         }
 
-        /* Container schneidet den unteren Canva-Balken ab */
+        /* Container schneidet die untere Canva-Statusleiste ab */
         .iframe-container {
             position: absolute;
             top: 0;
@@ -27,18 +27,18 @@
             overflow: hidden;
         }
 
-        /* Skaliert das iFrame leicht höher, um die Statusleiste herauszuschieben */
+        /* Skaliert das iFrame auf 106vh, um den Canva-Balken unten herauszuschieben */
         iframe {
             position: absolute;
             top: 0;
             left: 0;
             width: 100vw;
-            height: 106vh; /* 6% höher gegen die Canva-Navigationsleiste */
+            height: 106vh;
             border: none;
             z-index: 2;
         }
 
-        /* Fallback-Bild, falls Canva nicht/verzögert lädt */
+        /* Dein internes Fallback-Bild aus dem GitHub-Repository */
         #default-image {
             position: absolute;
             top: 0;
@@ -52,10 +52,10 @@
 </head>
 <body>
 
-    <!-- Default-/Fallback-Bild -->
-    <img id="default-image" src="https://via.placeholder.com/1920x1080/000000/ffffff?text=Remscheider+Turnverein+Infoboard" alt="Default Infoboard" />
+    <!-- Lokales Fallback-Bild auf GitHub -->
+    <img id="default-image" src="RTV-ZOOM-Bakcground.jpg" alt="Remscheider Turnverein Default Board" />
 
-    <!-- Canva iFrame mit Fit-Mode, Autoplay & Loop -->
+    <!-- Canva iFrame mit Autoplay & Loop -->
     <div class="iframe-container">
         <iframe 
             id="canva-frame"
@@ -71,13 +71,13 @@
         const defaultImg = document.getElementById('default-image');
         let loaded = false;
         
-        // Blendet das Default-Bild aus, sobald das iFrame vollständig geladen ist
+        // Blendet das Fallback-Bild aus, sobald das iFrame geladen ist
         function hideDefaultImage() {
             loaded = true;
             defaultImg.style.display = 'none';
         }
 
-        // Falls das iFrame nach 4 Sekunden nicht geladen hat, bleibt/wird das Fallback-Bild angezeigt
+        // Falls das iFrame nach 4 Sekunden nicht lädt, bleibt das Fallback-Bild sichtbar
         setTimeout(() => {
             if (!loaded) {
                 iframe.style.display = 'none';
@@ -85,7 +85,7 @@
             }
         }, 4000);
 
-        // Automatischer Reload 1x pro Stunde (3.600.000 Millisekunden)
+        // Automatischer Neuladevorgang jede Stunde (3.600.000 ms)
         setTimeout(() => {
             window.location.reload(true);
         }, 3600000);
