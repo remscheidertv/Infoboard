@@ -15,8 +15,8 @@
             height: 100%;
             overflow: hidden;
             background-color: #000000;
+            font-family: Arial, sans-serif;
         }
-        /* Der Wrapper schneidet alles ab, was über den Bildschirm hinausragt */
         #iframeWrapper {
             width: 100vw;
             height: 100vh;
@@ -24,15 +24,52 @@
             position: relative;
             background-color: #000000;
         }
-        /* Das Iframe wird 50px höher gezogen, sodass die Google-Leiste unten im unsichtbaren Bereich landet */
         #slidesFrame {
             width: 100vw;
-            height: calc(100vh + 50px);
+            height: 100vh;
             border: 0;
             display: block;
             position: absolute;
             top: 0;
             left: 0;
+        }
+        
+        /* Eigener Infobalken, der über dem unteren Rand liegt und die Google-Leiste verdeckt */
+        #customBottomBar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100vw;
+            height: 45px; /* Höhe des Balkens – bei Bedarf anpassbar */
+            background-color: #002b5c; /* Vereinsfarbe (z.B. dunkles Blau) oder #000000 für Schwarz */
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            z-index: 5;
+            overflow: hidden;
+            border-top: 2px solid #ffcc00; /* Optionaler Akzentstrich oben */
+        }
+
+        /* Styling für den Lauftext */
+        .marquee-container {
+            width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        .marquee-text {
+            display: inline-block;
+            padding-left: 100%;
+            animation: marquee 25s linear infinite; /* 25s = Geschwindigkeit (je kleiner, desto schneller) */
+            font-size: 20px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        @keyframes marquee {
+            0%   { transform: translate(0, 0); }
+            100% { transform: translate(-100%, 0); }
         }
     </style>
 </head>
@@ -40,10 +77,21 @@
 
     <div id="iframeWrapper">
         <iframe id="slidesFrame" src="" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+        
+        <!-- Eigener unterer Balken mit Lauftext zur Überdeckung der Google-Leiste -->
+        <div id="customBottomBar">
+            <div class="marquee-container">
+                <span class="marquee-text">
+                    📢 Nächster Erste-Hilfe-Kurs am DRK-Kurstermin beachten! &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; 
+                    Bei Fragen an den Sportbereich wenden &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; 
+                    Viel Spaß im Training beim RTV!
+                </span>
+            </div>
+        </div>
     </div>
 
     <script>
-        // Konfiguration mit stabiler pubembed-URL
+        // Konfiguration
         const SLIDES_URL = "https://docs.google.com/presentation/d/e/2PACX-1vS6FISkOWah7vDfoTksdmtnKHjcwhseKtcHiUtf38DiKiDWwDJmEZSFkewOLSAytIgkqu7JZndHkYa6/pubembed?start=true&loop=true&delayms=30000";
         const RELOAD_INTERVAL_MINUTES = 60;
 
