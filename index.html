@@ -10,7 +10,11 @@
     </style>
 </head>
 <body>
-    <!-- Hier deinen Canva-Link einfügen und hinten &autoplay=1 anhängen -->
-    <iframe src="https://www.canva.com/design/DAHYp2BSPNE/b3N_WR3FMNHLvW_fCnHOQQ/view&autoplay=1" allow="autoplay"></iframe>
+    <!-- Wichtig sind hier die Zusätze in "allow" für Android-Kompatibilität -->
+    <iframe 
+        src="https://www.canva.com/design/DAHYp2BSPNE/b3N_WR3FMNHLvW_fCnHOQQ/view&autoplay=1" 
+        allow="autoplay; encrypted-media; fullscreen; picture-in-picture" 
+        sandbox="allow-scripts allow-same-origin allow-popups allow-forms">
+    </iframe>
 </body>
 </html>
