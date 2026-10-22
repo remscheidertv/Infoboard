@@ -31,9 +31,16 @@
             display: inline-block;
             white-space: nowrap;
             animation: marquee 35s linear infinite;
-            font-size: 100vh; /* Großes Format für optimale Lesbarkeit auf dem TV */
+            font-size: 12vh; /* Schriftgröße nach Bedarf anpassbar */
             font-weight: bold;
             line-height: 1;
+        }
+
+        /* Styling für das RTV-Logo als Trenner */
+        .ticker-move img {
+            height: 0.8em; /* Passt sich proportional der Texthöhe an */
+            vertical-align: middle;
+            margin: 0 35px; /* Abstand links und rechts vom Logo */
         }
 
         @keyframes marquee {
@@ -64,7 +71,10 @@
                                       .filter(l => l.length > 0 && !l.toLowerCase().startsWith("aktueller text"));
                     
                     if (lines.length > 0) {
-                        const baseText = lines.join(" &nbsp;&nbsp;&nbsp;&nbsp;+++&nbsp;&nbsp;&nbsp;&nbsp; ") + " &nbsp;&nbsp;&nbsp;&nbsp;+++&nbsp;&nbsp;&nbsp;&nbsp; ";
+                        // Hier wird dein exakter Logo-Dateiname als Trenner eingebunden
+                        const separator = ' <img src="RTV-Logo-Freigestellt-weiss.png" alt="RTV Logo"> ';
+                        
+                        const baseText = lines.join(separator) + separator;
                         const tickerElem = document.getElementById('ticker');
                         
                         let fullText = baseText;
